@@ -1,4 +1,4 @@
-# CBX-Shell
+# CBX Shell
 Thumbnail preview for ZIP and RAR image archives (CBZ/CBR)
 
 ##Minimium system requirements
