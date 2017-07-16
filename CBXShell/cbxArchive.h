@@ -541,7 +541,7 @@ private:
 private:
 	inline BOOL GetFileSizeCrt(LPCTSTR pszFile, __int64 &fsize)
 	{
-		_stat64 _s;
+		struct _stat64 _s;
 		_s.st_size=0;
 		if (0!=::_tstat64(pszFile, &_s)) return FALSE;
 		fsize=_s.st_size;
