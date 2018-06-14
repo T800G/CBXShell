@@ -56,6 +56,7 @@ void CMainDlg::InitUI()
 	Button_SetCheck(GetDlgItem(IDC_CB_CBZ),  m_reg.HasTH(CBX_CBZ));
 	Button_SetCheck(GetDlgItem(IDC_CB_RAR),  m_reg.HasTH(CBX_RAR));
 	Button_SetCheck(GetDlgItem(IDC_CB_CBR),  m_reg.HasTH(CBX_CBR));
+	Button_SetCheck(GetDlgItem(IDC_CB_SHOWICON), m_reg.IsShowIconOpt());//CBX_SHOWICON
 	Button_SetCheck(GetDlgItem(IDC_CB_SORT), m_reg.IsSortOpt());//CBX_SORT
 }
 
@@ -71,7 +72,13 @@ void CMainDlg::OnApplyImpl()
 		bRefresh=TRUE;
 		m_reg.SetSortOpt(bRet);
 	}
-	
+	//show archive icon
+	bRet = (BST_CHECKED == Button_GetCheck(GetDlgItem(IDC_CB_SHOWICON)));
+	if (bRet != m_reg.IsShowIconOpt())
+	{
+		bRefresh = TRUE;
+		m_reg.SetShowIconOpt(bRet);
+	}
 	//thumbnail handlers
 	bRet=(BST_CHECKED==Button_GetCheck(GetDlgItem(IDC_CB_ZIP)));
 	if (bRet!=m_reg.HasTH(CBX_ZIP))
