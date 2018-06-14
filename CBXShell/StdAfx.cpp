@@ -8,5 +8,3 @@
 #include <statreg.h>
 #include <statreg.cpp>
 #endif
-
-#include <atlimpl.cpp>

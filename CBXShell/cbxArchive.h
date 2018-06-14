@@ -541,7 +541,7 @@ private:
 private:
 	inline BOOL GetFileSizeCrt(LPCTSTR pszFile, __int64 &fsize)
 	{
-		_stat64 _s;
+		struct _stat64 _s;
 		_s.st_size=0;
 		if (0!=::_tstat64(pszFile, &_s)) return FALSE;
 		fsize=_s.st_size;
@@ -624,6 +624,34 @@ private:
 	return TRUE;
 	}
 
+	static inline BOOL Draw(
+		CImage ci,
+		_In_ HDC hDestDC,
+		_In_ int xDest,
+		_In_ int yDest,
+		_In_ int nDestWidth,
+		_In_ int nDestHeight,
+		_In_ int xSrc,
+		_In_ int ySrc,
+		_In_ int nSrcWidth,
+		_In_ int nSrcHeight,
+		_In_ Gdiplus::InterpolationMode interpolationMode) throw()
+	{
+		Gdiplus::Bitmap bm((HBITMAP)ci, NULL);
+		if (bm.GetLastStatus() != Gdiplus::Ok)
+		{
+			return FALSE;
+		}
+
+		Gdiplus::Graphics dcDst(hDestDC);
+		dcDst.SetInterpolationMode(interpolationMode);
+
+		Gdiplus::Rect destRec(xDest, yDest, nDestWidth, nDestHeight);
+
+		Gdiplus::Status status = dcDst.DrawImage(&bm, destRec, xSrc, ySrc, nSrcWidth, nSrcHeight, Gdiplus::Unit::UnitPixel);
+
+		return status == Gdiplus::Ok;
+	}
 
 	HBITMAP ThumbnailFromIStream(IStream* pIs, const LPSIZE pThumbSize)
 	{
@@ -656,7 +684,8 @@ private:
 
 			HBITMAP hbmpOld=hdcNew.SelectBitmap(hbmpNew);
 			hdcNew.FillSolidRect(0,0, tw,th, RGB(255,255,255));//white background
-			ci.Draw(hdcNew, 0,0, tw,th, 0,0, ci.GetWidth(),ci.GetHeight());//too late for error checks
+			RECT rect = { 0,0, ci.GetWidth(),ci.GetHeight() };
+			Draw(ci, hdcNew, 0, 0, tw, th, 0, 0, ci.GetWidth(), ci.GetHeight(), Gdiplus::InterpolationMode::InterpolationModeHighQualityBicubic);//too late for error checks
 			hdcNew.SelectBitmap(hbmpOld);
 
 		return hbmpNew.Detach();
