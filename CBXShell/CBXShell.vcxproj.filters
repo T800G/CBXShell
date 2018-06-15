@@ -72,4 +72,9 @@
       <Filter>COM</Filter>
     </Midl>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\zip.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

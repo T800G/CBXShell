@@ -2,7 +2,10 @@
 // Copyright (C) 2006-2009
 // http://www.resedit.net
 
-#include <windows.h>
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "windows.h"
+#include "prsht.h"
+#undef APSTUDIO_HIDDEN_SYMBOLS
 #include <commctrl.h>
 #include <richedit.h>
 #include <atlres.h>
@@ -18,6 +21,17 @@ IDR_CBXShell       REGISTRY       "CBXShell.rgs"
 
 
 
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON1               ICON                    "Resources\\zip.ico"
+
+
+
 //
 // String Table resources
 //
@@ -26,8 +40,6 @@ STRINGTABLE
     IDS_PROJNAME                  "CBXShell"
     IDS_CBXSHELL_DESC             "CBXShell Class"
 }
-
-
 
 //
 // Version Information resources

@@ -301,6 +301,10 @@
       <InterfaceIdentifierFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CBXShell_i.c</InterfaceIdentifierFileName>
     </Midl>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\zip.ico">
+    </Image>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="packages\wtl.9.1.1\build\native\wtl.targets" Condition="Exists('packages\wtl.9.1.1\build\native\wtl.targets')" />

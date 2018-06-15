@@ -44,7 +44,7 @@ FONT 8, "Ms Shell Dlg"
 	AUTOCHECKBOX    "Sort images alphabetically", IDC_CB_SORT, 20, 115, 155, 8
     LTEXT           "Uncheck to sort images by archive order.\nRequired to display custom thumbnail.", IDC_SORT_DESC, 30, 130, 145, 18, SS_LEFT, WS_EX_TRANSPARENT
 	AUTOCHECKBOX    "Show archive indicator", IDC_CB_SHOWICON, 20, 150, 150, 10
-	LTEXT           "Display a small icon at bottom right of thumbnail letting you know it's an archive.", IDC_CB_SHOWICON_DESC, 30, 165, 145, 18, SS_LEFT, WS_EX_TRANSPARENT
+	LTEXT           "Display a ZIP icon top-left of thumbnail to let you know it's an archive.", IDC_CB_SHOWICON_DESC, 30, 165, 145, 18, SS_LEFT, WS_EX_TRANSPARENT
 }
 
 

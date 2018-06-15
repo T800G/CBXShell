@@ -255,9 +255,9 @@ public:
 	}
 };
 
-
 class CCBXArchive
 {
+
 public:
 	CCBXArchive()
 	{
@@ -536,6 +536,7 @@ private:
 	CBXTYPE m_cbxType;
 	IStream* m_pIs;
 	BOOL m_bSort;
+	BOOL m_showIcon;
 
 
 private:
@@ -662,8 +663,10 @@ private:
 		//check size
 		int tw=ci.GetWidth();
 		int th=ci.GetHeight();
-		float rx=(float)pThumbSize->cx/(float)tw;
-		float ry=(float)pThumbSize->cy/(float)th;
+		float cx = (float)pThumbSize->cx;
+		float cy = (float)pThumbSize->cy;
+		float rx = cx/(float)tw;
+		float ry = cy/(float)th;
 
 		//if bigger size
 		if ((rx<1) || (ry<1))
@@ -684,8 +687,11 @@ private:
 
 			HBITMAP hbmpOld=hdcNew.SelectBitmap(hbmpNew);
 			hdcNew.FillSolidRect(0,0, tw,th, RGB(255,255,255));//white background
-			RECT rect = { 0,0, ci.GetWidth(),ci.GetHeight() };
+
 			Draw(ci, hdcNew, 0, 0, tw, th, 0, 0, ci.GetWidth(), ci.GetHeight(), Gdiplus::InterpolationMode::InterpolationModeHighQualityBicubic);//too late for error checks
+			if(m_showIcon) 
+				DrawIcon(hdcNew, 0, 0, zipIcon);
+
 			hdcNew.SelectBitmap(hbmpOld);
 
 		return hbmpNew.Detach();
@@ -767,6 +773,8 @@ public:
 		{
 			if (ERROR_SUCCESS==_rk.QueryDWORDValue(_T("NoSort"), _d))
 				m_bSort=(_d==FALSE);
+			if (ERROR_SUCCESS == _rk.QueryDWORDValue(_T("ShowIcon"), _d))
+				m_showIcon = (_d == TRUE);
 		}
 	}
 
