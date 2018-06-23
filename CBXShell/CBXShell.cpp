@@ -15,15 +15,19 @@ BEGIN_OBJECT_MAP(ObjectMap)
 OBJECT_ENTRY(CLSID_CBXShell, CCBXShell)
 END_OBJECT_MAP()
 
+HICON zipIcon;
 /////////////////////////////////////////////////////////////////////////////
 // DLL Entry Point
 extern "C"
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
+	zipIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
+	
     if (dwReason == DLL_PROCESS_ATTACH)
     {
         _Module.Init(ObjectMap, hInstance, &LIBID_CBXSHELLLib);
         DisableThreadLibraryCalls(hInstance);
+
     }
     else
 	if (dwReason == DLL_PROCESS_DETACH)

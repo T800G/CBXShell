@@ -65,6 +65,28 @@ public:
 			rk.SetDWORDValue(_T("NoSort"), (DWORD)(bSort ? FALSE : TRUE));
 	}
 
+	// sort option
+	BOOL IsShowIconOpt()
+	{
+		DWORD d;
+		CRegKey rk;
+		if (ERROR_SUCCESS == rk.Open(HKEY_CURRENT_USER, CBX_APP_KEY, KEY_READ))
+		{
+			if (ERROR_SUCCESS == rk.QueryDWORDValue(_T("ShowIcon"), d))
+				return (d == TRUE);
+		}
+		return TRUE;
+	}
+
+	//////////////
+	// set show archive Icon
+	void SetShowIconOpt(BOOL bShowIcon)
+	{
+		CRegKey rk;
+		if (ERROR_SUCCESS == rk.Create(HKEY_CURRENT_USER, CBX_APP_KEY, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE))
+			rk.SetDWORDValue(_T("ShowIcon"), (DWORD)(bShowIcon ? TRUE : FALSE));
+	}
+
 	///////////////////////////////
 	// check for thumbnail handlers
 	BOOL HasTH(int cbxType)

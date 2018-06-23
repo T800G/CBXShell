@@ -255,9 +255,9 @@ public:
 	}
 };
 
-
 class CCBXArchive
 {
+
 public:
 	CCBXArchive()
 	{
@@ -536,12 +536,13 @@ private:
 	CBXTYPE m_cbxType;
 	IStream* m_pIs;
 	BOOL m_bSort;
+	BOOL m_showIcon;
 
 
 private:
 	inline BOOL GetFileSizeCrt(LPCTSTR pszFile, __int64 &fsize)
 	{
-		_stat64 _s;
+		struct _stat64 _s;
 		_s.st_size=0;
 		if (0!=::_tstat64(pszFile, &_s)) return FALSE;
 		fsize=_s.st_size;
@@ -624,6 +625,34 @@ private:
 	return TRUE;
 	}
 
+	static inline BOOL Draw(
+		CImage ci,
+		_In_ HDC hDestDC,
+		_In_ int xDest,
+		_In_ int yDest,
+		_In_ int nDestWidth,
+		_In_ int nDestHeight,
+		_In_ int xSrc,
+		_In_ int ySrc,
+		_In_ int nSrcWidth,
+		_In_ int nSrcHeight,
+		_In_ Gdiplus::InterpolationMode interpolationMode) throw()
+	{
+		Gdiplus::Bitmap bm((HBITMAP)ci, NULL);
+		if (bm.GetLastStatus() != Gdiplus::Ok)
+		{
+			return FALSE;
+		}
+
+		Gdiplus::Graphics dcDst(hDestDC);
+		dcDst.SetInterpolationMode(interpolationMode);
+
+		Gdiplus::Rect destRec(xDest, yDest, nDestWidth, nDestHeight);
+
+		Gdiplus::Status status = dcDst.DrawImage(&bm, destRec, xSrc, ySrc, nSrcWidth, nSrcHeight, Gdiplus::Unit::UnitPixel);
+
+		return status == Gdiplus::Ok;
+	}
 
 	HBITMAP ThumbnailFromIStream(IStream* pIs, const LPSIZE pThumbSize)
 	{
@@ -634,8 +663,10 @@ private:
 		//check size
 		int tw=ci.GetWidth();
 		int th=ci.GetHeight();
-		float rx=(float)pThumbSize->cx/(float)tw;
-		float ry=(float)pThumbSize->cy/(float)th;
+		float cx = (float)pThumbSize->cx;
+		float cy = (float)pThumbSize->cy;
+		float rx = cx/(float)tw;
+		float ry = cy/(float)th;
 
 		//if bigger size
 		if ((rx<1) || (ry<1))
@@ -656,7 +687,11 @@ private:
 
 			HBITMAP hbmpOld=hdcNew.SelectBitmap(hbmpNew);
 			hdcNew.FillSolidRect(0,0, tw,th, RGB(255,255,255));//white background
-			ci.Draw(hdcNew, 0,0, tw,th, 0,0, ci.GetWidth(),ci.GetHeight());//too late for error checks
+
+			Draw(ci, hdcNew, 0, 0, tw, th, 0, 0, ci.GetWidth(), ci.GetHeight(), Gdiplus::InterpolationMode::InterpolationModeHighQualityBicubic);//too late for error checks
+			if(m_showIcon) 
+				DrawIcon(hdcNew, 0, 0, zipIcon);
+
 			hdcNew.SelectBitmap(hbmpOld);
 
 		return hbmpNew.Detach();
@@ -738,6 +773,8 @@ public:
 		{
 			if (ERROR_SUCCESS==_rk.QueryDWORDValue(_T("NoSort"), _d))
 				m_bSort=(_d==FALSE);
+			if (ERROR_SUCCESS == _rk.QueryDWORDValue(_T("ShowIcon"), _d))
+				m_showIcon = (_d == TRUE);
 		}
 	}
 
